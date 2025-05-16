@@ -88,7 +88,7 @@ func TestTraceV2(t *testing.T) {
 		UserStatus: 1,
 		UpdatedAt:  &now,
 	}
-	diff := TraceValue(user, func(user *User) {
+	result := TraceProps(user, func(user *User) {
 		now := time.Now().UTC()
 		user.UserName = "test2"
 		user.UserStatus = 2
@@ -96,7 +96,26 @@ func TestTraceV2(t *testing.T) {
 		user.UpdatedAt = &now
 		user.IsDeleted = true
 	})
-	t.Log("\033[32m" + fmt.Sprintf("%+v", diff) + "\033[0m")
-	sql := buildUpdateSql(diff.Props, diff.Entity)
+	t.Log("\033[32m" + fmt.Sprintf("%+v", result) + "\033[0m")
+	sql := BuildUpdateSql(result)
 	t.Log("\033[32m" + sql + "\033[0m")
+}
+
+func TestTraceUpdate(t *testing.T) {
+	now := time.Now().Add(-time.Hour * 10).UTC()
+	user := User{
+		UserId:     54746881978,
+		UserName:   "test",
+		UserStatus: 1,
+		UpdatedAt:  &now,
+	}
+	result := TraceUpdate(user, func(user *User) {
+		now := time.Now().UTC()
+		user.UserName = "test2"
+		user.UserStatus = 2
+		user.UserGender = UserGenderFemale
+		user.UpdatedAt = &now
+		user.IsDeleted = true
+	})
+	t.Log("\033[32m" + result.UpdateSql + "\033[0m")
 }

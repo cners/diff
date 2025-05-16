@@ -64,3 +64,7 @@ func buildWherePrimary(entity any) (sql string) {
 	}
 	return fmt.Sprintf(" WHERE \"%s\" = %v", primaryKey, val)
 }
+
+func BuildUpdateSql[T any](t Traceable[T]) (sql string) {
+	return buildUpdateSql(t.Props, t.Entity)
+}
