@@ -12,7 +12,7 @@ func sqlChecking(sql string) bool {
 }
 
 // 构建更新sql,如果sql不合法则返回空字符串
-func buildUpdateSql(changedFields map[string]PropValue, entity any) (sql string) {
+func buildUpdateSql[T any](changedFields map[string]PropValue, entity T) (sql string) {
 	if len(changedFields) == 0 {
 		return ""
 	}
@@ -26,7 +26,7 @@ func buildUpdateSql(changedFields map[string]PropValue, entity any) (sql string)
 	sql += strings.Join(values, ",")
 
 	// 替换表明
-	sql = strings.Replace(sql, "{tableName}", getTableName(entity), 1)
+	sql = strings.Replace(sql, "{tableName}", getTableName(&entity), 1)
 	sql += buildWherePrimary(entity)
 
 	// 检查sql是否合法
@@ -67,4 +67,37 @@ func buildWherePrimary(entity any) (sql string) {
 
 func BuildUpdateSql[T any](t Traceable[T]) (sql string) {
 	return buildUpdateSql(t.Props, t.Entity)
+}
+
+func getTableName[T any](model T) (tableName string) {
+	// 获取值的反射对象
+	val := reflect.ValueOf(model)
+
+	// 处理指针类型
+	if val.Kind() == reflect.Ptr {
+		val = val.Elem()
+	}
+
+	// 查找TableName方法
+	method := val.MethodByName("TableName")
+	if !method.IsValid() {
+		// 如果没有找到方法，尝试获取类型的方法
+		t := reflect.TypeOf(model)
+		if t.Kind() == reflect.Ptr {
+			t = t.Elem()
+		}
+		method = reflect.New(t).MethodByName("TableName")
+	}
+
+	if !method.IsValid() {
+		return "" // 没有定义TableName方法
+	}
+
+	// 调用方法并获取结果
+	result := method.Call(nil) // 无参数调用
+	if len(result) > 0 {
+		return result[0].String() // 返回第一个结果的字符串形式
+	}
+
+	return ""
 }

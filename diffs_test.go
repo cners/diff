@@ -21,11 +21,11 @@ type User struct {
 	UpdatedBy  int64      `json:"updated_by" gorm:"column:updated_by;type:bigint;not null;default:0"`                      // 修改人
 }
 
-func (User) TableName() string {
+func (*User) TableName() string {
 	return "sys_user"
 }
 
-// 定义UserGender的枚举
+// 定义UserGender的枚举 0未知 1男 2女
 type UserGender int
 
 const (
@@ -48,19 +48,11 @@ func TestDiff(t *testing.T) {
 		UserName:   "test",
 		UserStatus: 1,
 	}
-	// user2 := user
-	// user.Trace(user2)
-	// user2.UserName = "test2"
-	// changedFields := user.GetChangedFields(user2)
-	// fmt.Println(changedFields)
-
 	var new User
 	copier.Copy(&new, &old)
 	new.UserName = "test2"
-	// changedFields := old.Diff(new)
 	changedFields := getChangedFields(*old, new)
 	sql := buildUpdateSql(changedFields, new)
-	// 输出带颜色的
 	t.Logf("\033[32mSQL: %s\033[0m", sql)
 }
 

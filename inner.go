@@ -95,16 +95,3 @@ func getChangedFields(old, new any) (changedFields map[string]PropValue) {
 
 	return changedFields
 }
-
-func getTableName(s any) (tableName string) {
-	t := reflect.TypeOf(s)
-	method, ok := t.MethodByName("TableName")
-	if !ok {
-		return ""
-	}
-	result := method.Func.Call([]reflect.Value{reflect.ValueOf(s)})
-	if len(result) > 0 && result[0].CanInterface() {
-		tableName = result[0].Interface().(string)
-	}
-	return tableName
-}
