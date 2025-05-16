@@ -1,0 +1,4 @@
+github.com/cners/diff v1.0.2 h1:WpfH01qD3dtIOq8WkL9gc+cmHNPSAUPOKO7gfGnm/tE=
+github.com/cners/diff v1.0.2/go.mod h1:rJMU6P5F6a5cMmQYurZ/RBc/Db/PBHjYcKjgSNbMU18=
+github.com/jinzhu/copier v0.4.0 h1:w3ciUoD19shMCRargcpm0cm91ytaBhDvuRpz1ODO/U8=
+github.com/jinzhu/copier v0.4.0/go.mod h1:DfbEm0FYsaqBcKcFuvmOZb218JkPGtvSHsKg8S8hyyg=

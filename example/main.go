@@ -1,16 +1,3 @@
-# diff
-
-When modifying a struct, you need to update it to the database. Through the diff package, you can generate SQL on demand, only including the fields that need to be modified.
-
-## Install
-
-```
-go get github.com/cners/diff
-```
-
-## Example
-
-```go
 package main
 
 import (
@@ -64,11 +51,3 @@ func main() {
 	})
 	fmt.Println(result.UpdateSql)
 }
-
-
-```
-
-Output:
-
-
-> UPDATE "sys_user" SET "updated_at" = '2025-05-16T08:02:22Z',"user_name" = 'test2',"user_status" = 2,"user_gender" = 2,"is_deleted" = true WHERE "user_id" = 54746881978
