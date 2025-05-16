@@ -2,6 +2,12 @@
 
 对某个struct要做修改时，要更新到数据库。通过diff包，可以按需生成sql，只包含需要修改的字段。
 
+## 使用
+
+```
+go get github.com/cners/diff
+```
+
 ```go
 
 func TestTraceV2(t *testing.T) {
