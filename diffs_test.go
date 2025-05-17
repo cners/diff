@@ -111,3 +111,31 @@ func TestTraceUpdate(t *testing.T) {
 	})
 	t.Log("\033[32m" + result.UpdateSql + "\033[0m")
 }
+
+func TestTraceUpdateV2(t *testing.T) {
+	type UpdateUser struct {
+		UserName   *string
+		UserStatus *int
+		UserGender *UserGender
+	}
+	// mock the request the user info
+	userName := "test3"
+	userStatus := 2
+	params_user := UpdateUser{
+		UserName:   &userName,
+		UserStatus: &userStatus,
+	}
+	now := time.Now().Add(-time.Hour * 10).UTC()
+	user := User{
+		UserId:     54746881978,
+		UserName:   "test",
+		UserStatus: 1,
+		UpdatedAt:  &now,
+	}
+
+	result := TraceUpdate(user, func(user *User) {
+		UpdateMap(user, &params_user)
+		user.UpdatedAt = UTC
+	})
+	t.Log("\033[32m" + result.UpdateSql + "\033[0m")
+}

@@ -46,6 +46,9 @@ func getVal(v PropValue) string {
 		return fmt.Sprintf("%v", v.Value.Interface())
 	case reflect.Ptr:
 		if v.Type.Elem().String() == "time.Time" {
+			if v.Value.IsNil() {
+				return "NULL"
+			}
 			t := v.Value.Elem().Interface().(time.Time)
 			return fmt.Sprintf("'%s'", t.Format(time.RFC3339))
 		}

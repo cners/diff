@@ -1,6 +1,10 @@
 package diff
 
-import "github.com/jinzhu/copier"
+import (
+	"time"
+
+	"github.com/jinzhu/copier"
+)
 
 type Traceable[T any] struct {
 	Entity    T                    // Entity.
@@ -31,3 +35,14 @@ func TraceUpdate[T any](entity T, fn func(entity *T)) (t Traceable[T]) {
 	t.UpdateSql = BuildUpdateSql(t)
 	return
 }
+
+func CopyValues[T any](fromEntity T, toEntity *T) {
+	copier.Copy(toEntity, &fromEntity)
+}
+
+func ptrUTC() *time.Time {
+	now := time.Now().UTC()
+	return &now
+}
+
+var UTC = ptrUTC()

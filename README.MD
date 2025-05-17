@@ -61,6 +61,7 @@ func main() {
 		user.UserGender = UserGenderFemale
 		user.UpdatedAt = &now
 		user.IsDeleted = true
+		// 也可以通过 diff.UpdateMap(user, &params_user) 批量更新字段值，来简化代码。
 	})
 	fmt.Println(result.UpdateSql)
 }
