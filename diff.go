@@ -46,12 +46,10 @@ func CopyValues[T any](fromEntity T, toEntity *T) {
 	copier.Copy(toEntity, &fromEntity)
 }
 
-func ptrUTC() *time.Time {
+func UTC() *time.Time {
 	now := time.Now().UTC()
 	return &now
 }
-
-var UTC = ptrUTC()
 
 func parsePropsToPostgresColumns(props map[string]PropValue) (columns map[string]interface{}) {
 	columns = make(map[string]interface{})
