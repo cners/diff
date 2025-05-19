@@ -7,8 +7,9 @@ import (
 )
 
 type PropValue struct {
-	Type  reflect.Type
-	Value reflect.Value
+	Type       reflect.Type
+	ColumnName string
+	Value      reflect.Value
 }
 
 func getGormColumnName(s interface{}, fieldName string) (columnName string) {
@@ -71,8 +72,9 @@ func getChangedFields(old, new any) (changedFields map[string]PropValue) {
 			// 如果只有一个值是 nil，则认为不相等
 			if oldValueField.IsNil() || newValueField.IsNil() {
 				changedFields[oldFieldName] = PropValue{
-					Type:  newValueField.Type(),
-					Value: newValueField,
+					Type:       newValueField.Type(),
+					ColumnName: getGormColumnName(new, oldFieldName),
+					Value:      newValueField,
 				}
 				continue
 			}
@@ -81,14 +83,16 @@ func getChangedFields(old, new any) (changedFields map[string]PropValue) {
 			newTime := newValueField.Elem().Interface().(time.Time)
 			if oldTime.Unix() != newTime.Unix() {
 				changedFields[oldFieldName] = PropValue{
-					Type:  newValueField.Type(),
-					Value: newValueField,
+					Type:       newValueField.Type(),
+					ColumnName: getGormColumnName(new, oldFieldName),
+					Value:      newValueField,
 				}
 			}
 		} else if !reflect.DeepEqual(oldValueField.Interface(), newValueField.Interface()) {
 			changedFields[oldFieldName] = PropValue{
-				Type:  newValueField.Type(),
-				Value: newValueField,
+				Type:       newValueField.Type(),
+				ColumnName: getGormColumnName(new, oldFieldName),
+				Value:      newValueField,
 			}
 		}
 	}
