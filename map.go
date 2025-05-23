@@ -20,11 +20,13 @@ func UpdateMap(dest interface{}, updates interface{}) error {
 
 	for i := 0; i < updatesValue.NumField(); i++ {
 		field := updatesValue.Field(i)
-		if !field.IsNil() { // 只处理非nil指针字段
-			fieldName := updatesValue.Type().Field(i).Name
-			destField := destValue.FieldByName(fieldName)
-			if destField.IsValid() && destField.CanSet() {
+		fieldName := updatesValue.Type().Field(i).Name
+		destField := destValue.FieldByName(fieldName)
+		if destField.IsValid() && destField.CanSet() {
+			if field.Kind() == reflect.Ptr && !field.IsNil() { // 如果是非nil指针字段
 				destField.Set(field.Elem()) // 解引用指针
+			} else if field.Kind() != reflect.Ptr { // 如果字段不是指针
+				destField.Set(field)
 			}
 		}
 	}

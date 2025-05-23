@@ -135,7 +135,7 @@ func TestTraceUpdateV2(t *testing.T) {
 
 	result := TraceUpdate(user, func(user *User) {
 		UpdateMap(user, &params_user)
-		user.UpdatedAt = UTC
+		user.UpdatedAt = UTC()
 	})
 	t.Log("\033[32m" + result.UpdateSql + "\033[0m")
 }
