@@ -19,6 +19,7 @@ type User struct {
 	CreatedAt  time.Time  `json:"created_at" gorm:"column:created_at;type:timestamptz;not null;default:CURRENT_TIMESTAMP"` // 创建时间
 	UpdatedAt  *time.Time `json:"updated_at" gorm:"column:updated_at;type:timestamptz"`                                    // 修改时间
 	UpdatedBy  int64      `json:"updated_by" gorm:"column:updated_by;type:bigint;not null;default:0"`                      // 修改人
+	PartId     int64
 }
 
 func (*User) TableName() string {
@@ -117,13 +118,16 @@ func TestTraceUpdateV2(t *testing.T) {
 		UserName   *string
 		UserStatus *int
 		UserGender *UserGender
+		PartId     *string
 	}
 	// mock the request the user info
 	userName := "test3"
 	userStatus := 2
+	partId := "1234567890"
 	params_user := UpdateUser{
 		UserName:   &userName,
 		UserStatus: &userStatus,
+		PartId:     &partId,
 	}
 	now := time.Now().Add(-time.Hour * 10).UTC()
 	user := User{
